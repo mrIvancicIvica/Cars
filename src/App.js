@@ -1,24 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core';
+import Routes from './Routes';
+// import SimpleList from './components/SimpleList';
+
+
+
+const theme = createMuiTheme({
+  palette: {
+    type:'dark',
+    primary: {
+      main: "#282c34",
+
+    },
+    secondary: {
+      main: '#fefefe',
+    },
+    buttonColor:{
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
+    }
+  },
+});
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className='App'>
+        <Routes />
+      </div>
+    </ThemeProvider>
   );
 }
 
