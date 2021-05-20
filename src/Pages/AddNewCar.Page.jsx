@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { observer } from 'mobx-react';
 import * as Yup from 'yup'
+import { useHistory } from "react-router-dom";
 import carsStore from '../store/CarsStore';
 
 const useStyles = makeStyles((theme) => ({
@@ -54,12 +55,14 @@ const Schema = Yup.object().shape({
 
 const AddNewCar = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   const formik = useFormik({
     initialValues: { brand: '', model: '', color: '' },
     validationSchema : Schema,
     onSubmit: ({ brand, model, color }) => {
       carsStore.adCar(brand, model, color);
+      history.push("/");
       formik.resetForm();
     },
   });
