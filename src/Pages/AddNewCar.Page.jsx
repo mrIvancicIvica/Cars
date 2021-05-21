@@ -62,6 +62,7 @@ const AddNewCar = () => {
     validationSchema : Schema,
     onSubmit: ({ brand, model, color }) => {
       carsStore.adCar(brand, model, color);
+      carsStore.setOpenSnack(true)
       history.push("/");
       formik.resetForm();
     },

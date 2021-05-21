@@ -3,13 +3,15 @@ import { nanoid } from 'nanoid';
 
 class CarsStore {
   cars = [{ id: 1, brand: 'vw' },{ id: 2, brand: 'mazda' },{ id: 3, brand: 'mercedes' },];
+  currentCar = { id: null, brand: '', model: '', color: '' };
   search = '';
   openDialog = null;
-  currentCar = { id: null, brand: '', model: '', color: '' };
+  snackBarState = false;
 
   constructor() {
     makeObservable(this, {
       cars: observable,
+      snackBarState: observable,
       search: observable,
       openDialog: observable,
       currentCar: observable,
@@ -42,6 +44,12 @@ class CarsStore {
   setOpenDialog(open) {
     this.openDialog = open;
   }
+
+  setOpenSnack(open) {
+    this.snackBarState = open;
+  }
+
+  
 
   setCurrentCar(id, brand, model, color) {
     this.currentCar = { id, brand, model, color };

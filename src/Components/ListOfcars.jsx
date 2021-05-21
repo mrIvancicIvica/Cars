@@ -20,6 +20,8 @@ import Search from '@material-ui/icons/Search';
 import { observer } from 'mobx-react';
 import EditCar from '../Pages/EditCars.Page';
 import carsStore from '../store/CarsStore';
+import SnackBarNotification from './SnackBarNotification'
+
 
 const useStyles = makeStyles({
   table: {
@@ -84,11 +86,22 @@ const ListOfCars = () => {
   const createSortHandler = (property) => (event) => {
     handleRequestSort(event, property);
   };
+
+  const handleClose = (reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    carsStore.setOpenSnack(false);
+  };
+  
+
   //! My Functions
   const handleEditCar = (car) => {
     carsStore.setOpenDialog(true);
     carsStore.setCurrentCar(car.id, car.brand, car.model, car.color);
   };
+
+
 
   return (
     <Container>
@@ -192,6 +205,8 @@ const ListOfCars = () => {
       >
         <EditCar />
       </Dialog>
+      <SnackBarNotification open={carsStore.snackBarState} handleClose={handleClose} message='New Car added' />
+
     </Container>
   );
 };
