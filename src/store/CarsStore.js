@@ -1,26 +1,48 @@
-import { action, computed, makeObservable, observable } from 'mobx';
-import { nanoid } from 'nanoid';
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+import { makeAutoObservable } from 'mobx';
+// import { nanoid } from 'nanoid';
+import  fb  from '../firebase/firebase.store';
 
 class CarsStore {
-  cars = [{ id: 1, brand: 'vw' },{ id: 2, brand: 'mazda' },{ id: 3, brand: 'mercedes' },];
+  cars = [{ id: 1, brand: 'vw' },{ id: 2, brand: 'mazda' },{ id: 3, brand: 'mercedes' }];
   currentCar = { id: null, brand: '', model: '', color: '' };
   search = '';
-  openDialog = null;
+  openDialog = false;
   snackBarState = false;
 
   constructor() {
-    makeObservable(this, {
-      cars: observable,
-      snackBarState: observable,
-      search: observable,
-      openDialog: observable,
-      currentCar: observable,
-      adCar: action,
-      removeCar: action,
-      setOpenDialog: action,
-      setCurrentCar: action,
-      filterCars: computed,
+    makeAutoObservable(this);
+
+
+
+    fb.cars.on('value', (snapshot) => {
+      const cardata = snapshot.val();
+      const carsList = [];
+      for (const id in cardata) {
+        carsList.push({ id  , ...cardata[id] });
+      }
+      this.cars = carsList;
     });
+    
+    
+    
+    // , {
+    //   cars: observable,
+    //   snackBarState: observable,
+    //   search: observable,
+    //   openDialog: observable,
+    //   currentCar: observable,
+    //   adCar: action,
+    //   setFilter: action,
+    //   removeCar: action,
+    //   setOpenDialog: action,
+    //   setCurrentCar: action,
+    //   filterCars: computed,
+    // });
+
+
+
   }
 
   get filterCars() {
@@ -33,12 +55,16 @@ class CarsStore {
     this.search = filter;
   }
 
-  removeCar(id) {
-    this.cars = this.cars.filter((car) => car.id !== id);
+  removeCar=(id) =>{
+    // this.cars = this.cars.filter((car) => car.id !== id);
+    const remove = fb.cars.child(id)
+   remove.remove()
   }
 
-  adCar(brand, model, color) {
-    this.cars.push({ id: nanoid(), brand, model, color });
+  adCar =(brand, model, color)=> {
+    // this.cars.push({ id: nanoid(), brand, model, color });
+    const car = { brand, model, color };
+    fb.cars.push(car);
   }
 
   setOpenDialog(open) {
