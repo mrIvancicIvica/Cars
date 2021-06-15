@@ -1,15 +1,14 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { makeAutoObservable } from 'mobx';
-// import { nanoid } from 'nanoid';
 import  fb  from '../firebase/firebase.store';
 
 class CarsStore {
   cars = [{ id: 1, brand: 'vw' },{ id: 2, brand: 'mazda' },{ id: 3, brand: 'mercedes' }];
   currentCar = { id: null, brand: '', model: '', color: '' };
   search = '';
+  
   openDialog = false;
-  snackBarState = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -61,19 +60,17 @@ class CarsStore {
    remove.remove()
   }
 
-  adCar =(brand, model, color)=> {
+  adCar =(value)=> {
     // this.cars.push({ id: nanoid(), brand, model, color });
-    const car = { brand, model, color };
-    fb.cars.push(car);
+    // const car = { brand, model, color };
+    fb.cars.push(value);
   }
 
   setOpenDialog(open) {
     this.openDialog = open;
   }
 
-  setOpenSnack(open) {
-    this.snackBarState = open;
-  }
+  
 
   
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Paper,
   Table,
@@ -20,8 +20,8 @@ import Search from '@material-ui/icons/Search';
 import { observer } from 'mobx-react';
 import EditCar from '../Pages/EditCars.Page';
 import carsStore from '../store/CarsStore';
-import SnackBarNotification from './SnackBarNotification'
-
+import SnackBarNotification from './SnackBarNotification';
+import listOfcarsUIStore from '../store/ListOfcarsUIStore';
 
 const useStyles = makeStyles({
   table: {
@@ -34,74 +34,71 @@ const useStyles = makeStyles({
 
 //! MaterialUI
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+// function descendingComparator(a, b, orderBy) {
+//   if (b[orderBy] < a[orderBy]) {
+//     return -1;
+//   }
+//   if (b[orderBy] > a[orderBy]) {
+//     return 1;
+//   }
+//   return 0;
+// }
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+// function getComparator(order, orderBy) {
+//   return order === 'desc'
+//     ? (a, b) => descendingComparator(a, b, orderBy)
+//     : (a, b) => -descendingComparator(a, b, orderBy);
+// }
 
-function stableSort(array, comparator) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  return stabilizedThis.map((el) => el[0]);
-}
+// function stableSort(array, comparator) {
+//   const stabilizedThis = array.map((el, index) => [el, index]);
+//   stabilizedThis.sort((a, b) => {
+//     const order = comparator(a[0], b[0]);
+//     if (order !== 0) return order;
+//     return a[1] - b[1];
+//   });
+//   return stabilizedThis.map((el) => el[0]);
+// }
 
 const ListOfCars = () => {
   const classes = useStyles();
-  const [valueToOrderBy, setValueToOrderBy] = useState('name');
-  const [orederDirection, setOrederDirection] = useState('asc');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  // const [valueToOrderBy, setValueToOrderBy] = useState('name');
+  // const [orederDirection, setOrederDirection] = useState('asc');
+  // const [page , setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   // setPage(0);
+  // };
 
-  const handleRequestSort = (event, property) => {
-    const isAscending =
-      valueToOrderBy === property && orederDirection === 'asc';
-    setValueToOrderBy(property);
-    setOrederDirection(isAscending ? 'desc' : 'asc');
-  };
+  // const handleRequestSort = (event, property) => {
+  //   const isAscending =
+  //     valueToOrderBy === property && orederDirection === 'asc';
+  //   setValueToOrderBy(property);
+  //   setOrederDirection(isAscending ? 'desc' : 'asc');
+  // };
 
-  const createSortHandler = (property) => (event) => {
-    handleRequestSort(event, property);
-  };
+  // const createSortHandler = (property) => (event) => {
+  //   handleRequestSort(event, property);
+  // };
 
   const handleClose = (reason) => {
     if (reason === 'clickaway') {
       return;
     }
-    carsStore.setOpenSnack(false);
+    listOfcarsUIStore.setOpenSnack(false);
   };
-  
 
   //! My Functions
   const handleEditCar = (car) => {
     carsStore.setOpenDialog(true);
     carsStore.setCurrentCar(car.id, car.brand, car.model, car.color);
   };
-
-
 
   return (
     <Container>
@@ -124,11 +121,13 @@ const ListOfCars = () => {
             <TableRow>
               <TableCell key='brand'>
                 <TableSortLabel
-                  active={valueToOrderBy === 'brand'}
+                  active={listOfcarsUIStore.valueToOrderBy === 'brand'}
                   direction={
-                    valueToOrderBy === 'brand' ? orederDirection : 'asc'
+                    listOfcarsUIStore.valueToOrderBy === 'brand'
+                      ? listOfcarsUIStore.orederDirection
+                      : 'asc'
                   }
-                  onClick={createSortHandler('brand')}
+                  onClick={listOfcarsUIStore.createSortHandler('brand')}
                 >
                   Manufacturer
                 </TableSortLabel>
@@ -136,11 +135,13 @@ const ListOfCars = () => {
 
               <TableCell align='right' key='model'>
                 <TableSortLabel
-                  active={valueToOrderBy === 'model'}
+                  active={listOfcarsUIStore.valueToOrderBy === 'model'}
                   direction={
-                    valueToOrderBy === 'model' ? orederDirection : 'asc'
+                    listOfcarsUIStore.valueToOrderBy === 'model'
+                      ? listOfcarsUIStore.orederDirection
+                      : 'asc'
                   }
-                  onClick={createSortHandler('model')}
+                  onClick={listOfcarsUIStore.createSortHandler('model')}
                 >
                   Model
                 </TableSortLabel>
@@ -148,11 +149,13 @@ const ListOfCars = () => {
 
               <TableCell align='right' key='color'>
                 <TableSortLabel
-                  active={valueToOrderBy === 'color'}
+                  active={listOfcarsUIStore.valueToOrderBy === 'color'}
                   direction={
-                    valueToOrderBy === 'color' ? orederDirection : 'asc'
+                    listOfcarsUIStore.valueToOrderBy === 'color'
+                      ? listOfcarsUIStore.orederDirection
+                      : 'asc'
                   }
-                  onClick={createSortHandler('color')}
+                  onClick={listOfcarsUIStore.createSortHandler('color')}
                 >
                   Color
                 </TableSortLabel>
@@ -162,11 +165,19 @@ const ListOfCars = () => {
           </TableHead>
 
           <TableBody>
-            {stableSort(
-              carsStore.filterCars,
-              getComparator(orederDirection, valueToOrderBy)
-            )
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            {listOfcarsUIStore
+              .stableSort(
+                carsStore.filterCars,
+                listOfcarsUIStore.getComparator(
+                  listOfcarsUIStore.orederDirection,
+                  listOfcarsUIStore.valueToOrderBy
+                )
+              )
+              .slice(
+                listOfcarsUIStore.page * listOfcarsUIStore.rowsPerPage,
+                listOfcarsUIStore.page * listOfcarsUIStore.rowsPerPage +
+                  listOfcarsUIStore.rowsPerPage
+              )
               .map((car) => (
                 <TableRow key={car.id}>
                   <TableCell component='th' scope='row'>
@@ -193,10 +204,10 @@ const ListOfCars = () => {
           rowsPerPageOptions={[5, 10, 15]}
           component='div'
           count={carsStore.cars.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          rowsPerPage={listOfcarsUIStore.rowsPerPage}
+          page={listOfcarsUIStore.page}
+          onChangePage={listOfcarsUIStore.handleChangePage}
+          onChangeRowsPerPage={listOfcarsUIStore.handleChangeRowsPerPage}
         />
       </Container>
       <Dialog
@@ -205,8 +216,11 @@ const ListOfCars = () => {
       >
         <EditCar />
       </Dialog>
-      <SnackBarNotification open={carsStore.snackBarState} handleClose={handleClose} message='New Car added' />
-
+      <SnackBarNotification
+        open={listOfcarsUIStore.snackBarState}
+        handleClose={handleClose}
+        message='New Car added'
+      />
     </Container>
   );
 };
