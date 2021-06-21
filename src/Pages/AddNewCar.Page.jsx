@@ -3,9 +3,11 @@ import {TextField,Button, Container, Grid,MenuItem,} from '@material-ui/core';
 import { observer } from 'mobx-react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
+import {v4 as uuid} from 'uuid'
 import carsStore from '../store/CarsStore';
 import addNewCarUiStore from '../store/AddNewCarUIStore';
 import listOfcarsUIStore from '../store/ListOfcarsUIStore'
+
 
 const AddNewCar = () => {
   const classes = addNewCarUiStore.useStyles();
@@ -18,7 +20,7 @@ const AddNewCar = () => {
         <h2>Add New Car</h2>
 
         <Formik
-          initialValues={{ brand: '', model: '', color: '' }}
+          initialValues={{id: uuid(), brand: '', model: '', color: '' }}
           validationSchema={addNewCarUiStore.Schema}
           onSubmit={(value) => {
             carsStore.adCar(value);

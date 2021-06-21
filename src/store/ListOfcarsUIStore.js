@@ -24,7 +24,7 @@ class ListOfcarsUIStore {
     return 0;
   };
 
-  getComparator = (order, orderBy) =>
+  getComparator = (order, orderBy) => 
     order === 'desc'
       ? (a, b) => this.descendingComparator(a, b, orderBy)
       : (a, b) => -this.descendingComparator(a, b, orderBy);

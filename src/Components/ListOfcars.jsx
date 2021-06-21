@@ -14,6 +14,7 @@ import {
   InputAdornment,
   Button,
   Dialog,
+  CircularProgress
 } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
 import Search from '@material-ui/icons/Search';
@@ -23,14 +24,25 @@ import carsStore from '../store/CarsStore';
 import SnackBarNotification from './SnackBarNotification';
 import listOfcarsUIStore from '../store/ListOfcarsUIStore';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme)=>({
   table: {
     marginTop: 50,
   },
   header: {
     flexGrow: 1,
   },
-});
+  loadMore: {
+    width: '50%',
+    marginTop: '12px',
+    color: 'inherit',
+  },
+  progres:{
+    marginLeft: theme.spacing(74),
+    marginTop: theme.spacing(5),
+    color: 'white',
+
+  }
+}));
 
 //! MaterialUI
 
@@ -216,11 +228,30 @@ const ListOfCars = () => {
       >
         <EditCar />
       </Dialog>
+      <Button
+        onClick={() => carsStore.showPrevious({item: carsStore.cars[0]})}
+        variant='contained'
+        color='primary'
+        className={classes.loadMore}
+      >
+        previous page
+      </Button>
+      <Button
+        onClick={() => carsStore.showNext({item: carsStore.cars[carsStore.cars.length -1]})}
+        variant='contained'
+        color='primary'
+        className={classes.loadMore}
+      >
+        Next Page
+      </Button>
       <SnackBarNotification
         open={listOfcarsUIStore.snackBarState}
         handleClose={handleClose}
         message='New Car added'
       />
+      {carsStore.isLoading && <CircularProgress className={classes.progres} /> }
+      {carsStore.isEmpty && (<SnackBarNotification message='No more data' open={carsStore.isEmpty} /> ) }
+      
     </Container>
   );
 };

@@ -4,7 +4,7 @@ import { Button, TextField, Grid, Container } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { observer } from 'mobx-react';
-import carsStore from '../store/CarsStore';
+import carsStore from '../store/CarsStore'
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,7 +39,7 @@ const EditCars = () => {
     },
     validationSchema: Schema,
     onSubmit: ({id, brand, model, color }) => {
-      carsStore.updateCar(id,brand, model, color)
+      carsStore.onUpdateCar(id,brand, model, color)
       carsStore.setOpenDialog(false)
     },
   });
