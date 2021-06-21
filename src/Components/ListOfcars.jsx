@@ -7,7 +7,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TablePagination,
+  // TablePagination,
   TableSortLabel,
   Container,
   TextField,
@@ -212,7 +212,7 @@ const ListOfCars = () => {
           </TableBody>
         </Table>
 
-        <TablePagination
+        {/* <TablePagination
           rowsPerPageOptions={[5, 10, 15]}
           component='div'
           count={carsStore.cars.length}
@@ -220,7 +220,7 @@ const ListOfCars = () => {
           page={listOfcarsUIStore.page}
           onChangePage={listOfcarsUIStore.handleChangePage}
           onChangeRowsPerPage={listOfcarsUIStore.handleChangeRowsPerPage}
-        />
+        /> */}
       </Container>
       <Dialog
         open={carsStore.openDialog}
