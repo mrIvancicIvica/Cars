@@ -11,6 +11,7 @@ class CarsStore {
   openDialog = false;
   isLoading = true;
   isEmpty = false;
+  searchCar = '';
 
   constructor() {
     makeAutoObservable(this);
@@ -58,7 +59,7 @@ class CarsStore {
   };
 
   showPrevious = ({ item }) => {
-    this.isEmpty = false
+    this.isEmpty = false;
     const fetchPrevData = async () => {
       await fb.cars
         .endBefore(item.brand)
@@ -89,6 +90,24 @@ class CarsStore {
   setFilter(filter) {
     this.search = filter;
   }
+
+  searchCar(car) {
+    this.searchCar = car;
+  }
+
+  searchFirebaseCar = (value) => {
+    fb.car
+      .where('brand', '==', `${value.brand}`)
+      .get()
+      .then((snap) => {
+        const filteredBrand = [];
+        snap.forEach((doc) => {
+          filteredBrand.push({...doc.data(), id: doc.id});
+        });
+
+        this.cars = filteredBrand;
+      });
+  };
 
   removeCar = (id) => {
     // this.cars = this.cars.filter((car) => car.id !== id);
@@ -123,9 +142,9 @@ class CarsStore {
   //   }
   // }
 
-  onUpdateCar=(id, brand, model, color)=>{
-    fb.car.doc(id).set({id, brand, model, color})
-  }
+  onUpdateCar = (id, brand, model, color) => {
+    fb.car.doc(id).set({ id, brand, model, color });
+  };
 }
 
 const carsStore = new CarsStore();

@@ -4,6 +4,7 @@ import AddNewCar from './Pages/AddNewCar.Page';
 
 import Header from './Components/Header';
 import ListOfCars from './Components/ListOfcars';
+import EditCarsPage from './Pages/EditCars.Page';
 
 const Routes = () => (
   <BrowserRouter>
@@ -11,6 +12,7 @@ const Routes = () => (
     <Switch>
       <Route path='/' component={ListOfCars} exact />
       <Route path='/newcar' component={AddNewCar} />
+      <Route path='/editcar' component={EditCarsPage} />
     </Switch>
   </BrowserRouter>
 );

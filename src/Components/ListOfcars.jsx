@@ -11,20 +11,28 @@ import {
   TableSortLabel,
   Container,
   TextField,
-  InputAdornment,
   Button,
   Dialog,
-  CircularProgress
+  CircularProgress,
+  MenuItem,
 } from '@material-ui/core';
-import { Delete, Edit } from '@material-ui/icons';
-import Search from '@material-ui/icons/Search';
+import {
+  Delete,
+  Edit,
+  ArrowBackIos,
+  ArrowForwardIos,
+} from '@material-ui/icons';
+// import Search from '@material-ui/icons/Search';
 import { observer } from 'mobx-react';
+import { Formik } from 'formik';
+import { Link } from 'react-router-dom';
 import EditCar from '../Pages/EditCars.Page';
 import carsStore from '../store/CarsStore';
 import SnackBarNotification from './SnackBarNotification';
 import listOfcarsUIStore from '../store/ListOfcarsUIStore';
+import addNewCarUiStore from '../store/AddNewCarUIStore';
 
-const useStyles = makeStyles((theme)=>({
+const useStyles = makeStyles((theme) => ({
   table: {
     marginTop: 50,
   },
@@ -36,11 +44,13 @@ const useStyles = makeStyles((theme)=>({
     marginTop: '12px',
     color: 'inherit',
   },
-  progres:{
+  progres: {
     marginLeft: theme.spacing(74),
     marginTop: theme.spacing(5),
     color: 'white',
-
+  },
+  link:{
+    color: 'fefefe'
   }
 }));
 
@@ -108,14 +118,16 @@ const ListOfCars = () => {
 
   //! My Functions
   const handleEditCar = (car) => {
-    carsStore.setOpenDialog(true);
+    // carsStore.setOpenDialog(true);
+
     carsStore.setCurrentCar(car.id, car.brand, car.model, car.color);
   };
 
   return (
     <Container>
       <h1>List of Cars</h1>
-      <TextField
+
+      {/* <TextField
         className={classes.margin}
         placeholder='Search car...'
         InputProps={{
@@ -126,20 +138,63 @@ const ListOfCars = () => {
           ),
         }}
         onChange={(e) => carsStore.setFilter(e.target.value)}
-      />
+      /> */}
+
+      <Formik
+        initialValues={{ brand: '' }}
+        onSubmit={(value) => {
+          carsStore.searchFirebaseCar(value);
+        }}
+      >
+        {(props) => (
+          <form onSubmit={props.handleSubmit} className={classes.form}>
+            <TextField
+              id='brand'
+              name='brand'
+              label='Brand'
+              value={props.values.brand}
+              onChange={props.handleChange}
+              error={props.touched.brand && Boolean(props.errors.brand)}
+              helperText={props.touched.brand && props.errors.brand}
+              variant='outlined'
+              color='secondary'
+              fullWidth
+              select
+            >
+              {addNewCarUiStore.CarsBrand.map((car) => (
+                <MenuItem key={car.id} value={car.brand}>
+                  {car.brand}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <Button
+              className={classes.submit}
+              type='submit'
+              variant='contained'
+              color='primary'
+              fullWidth
+            >
+              search car
+            </Button>
+          </form>
+        )}
+      </Formik>
+
       <Container component={Paper} className={classes.table}>
         <Table aria-label='simple table'>
           <TableHead>
             <TableRow>
               <TableCell key='brand'>
                 <TableSortLabel
-                  active={listOfcarsUIStore.valueToOrderBy === 'brand'}
-                  direction={
-                    listOfcarsUIStore.valueToOrderBy === 'brand'
-                      ? listOfcarsUIStore.orederDirection
-                      : 'asc'
-                  }
-                  onClick={listOfcarsUIStore.createSortHandler('brand')}
+                onClick={()=> listOfcarsUIStore.togleBrand()}
+                  // active={listOfcarsUIStore.valueToOrderBy === 'brand'}
+                  // direction={
+                  //   listOfcarsUIStore.valueToOrderBy === 'brand' 
+                  //     ? listOfcarsUIStore.orederDirection
+                  //     : 'asc'
+                  // }
+                  // onClick={listOfcarsUIStore.createSortHandler('brand')}
                 >
                   Manufacturer
                 </TableSortLabel>
@@ -147,13 +202,15 @@ const ListOfCars = () => {
 
               <TableCell align='right' key='model'>
                 <TableSortLabel
-                  active={listOfcarsUIStore.valueToOrderBy === 'model'}
-                  direction={
-                    listOfcarsUIStore.valueToOrderBy === 'model'
-                      ? listOfcarsUIStore.orederDirection
-                      : 'asc'
-                  }
-                  onClick={listOfcarsUIStore.createSortHandler('model')}
+                onClick={()=> listOfcarsUIStore.toggleModel()}
+
+                  // active={listOfcarsUIStore.valueToOrderBy === 'model'}
+                  // direction={
+                  //   listOfcarsUIStore.valueToOrderBy === 'model'
+                  //     ? listOfcarsUIStore.orederDirection
+                  //     : 'asc'
+                  // }
+                  // onClick={listOfcarsUIStore.createSortHandler('model')}
                 >
                   Model
                 </TableSortLabel>
@@ -161,13 +218,18 @@ const ListOfCars = () => {
 
               <TableCell align='right' key='color'>
                 <TableSortLabel
-                  active={listOfcarsUIStore.valueToOrderBy === 'color'}
-                  direction={
-                    listOfcarsUIStore.valueToOrderBy === 'color'
-                      ? listOfcarsUIStore.orederDirection
-                      : 'asc'
-                  }
-                  onClick={listOfcarsUIStore.createSortHandler('color')}
+
+                onClick={()=> listOfcarsUIStore.toggleColor()}
+
+
+                  // active={listOfcarsUIStore.valueToOrderBy === 'color'}
+                  // direction={
+                  //   listOfcarsUIStore.valueToOrderBy === 'color'
+                  //     ? listOfcarsUIStore.orederDirection
+                  //     : 'asc'
+                  // }
+                  // onClick={listOfcarsUIStore.createSortHandler('color')}
+                
                 >
                   Color
                 </TableSortLabel>
@@ -200,9 +262,11 @@ const ListOfCars = () => {
 
                   <TableCell align='right'>{car.color}</TableCell>
                   <TableCell align='right'>
-                    <Button onClick={() => handleEditCar(car)}>
-                      <Edit fontSize='small' />
+                      <Link to='/editcar' >
+                    <Button  onClick={() => handleEditCar(car)}>
+                        <Edit className={classes.link} fontSize='small'  />
                     </Button>
+                      </Link>
                     <Button onClick={() => carsStore.removeCar(car.id)}>
                       <Delete fontSize='small' />
                     </Button>
@@ -229,29 +293,34 @@ const ListOfCars = () => {
         <EditCar />
       </Dialog>
       <Button
-        onClick={() => carsStore.showPrevious({item: carsStore.cars[0]})}
+        onClick={() => carsStore.showPrevious({ item: carsStore.cars[0] })}
         variant='contained'
         color='primary'
         className={classes.loadMore}
       >
-        previous page
+        <ArrowBackIos />
       </Button>
       <Button
-        onClick={() => carsStore.showNext({item: carsStore.cars[carsStore.cars.length -1]})}
+        onClick={() =>
+          carsStore.showNext({
+            item: carsStore.cars[carsStore.cars.length - 1],
+          })
+        }
         variant='contained'
         color='primary'
         className={classes.loadMore}
       >
-        Next Page
+        <ArrowForwardIos />
       </Button>
       <SnackBarNotification
         open={listOfcarsUIStore.snackBarState}
         handleClose={handleClose}
         message='New Car added'
       />
-      {carsStore.isLoading && <CircularProgress className={classes.progres} /> }
-      {carsStore.isEmpty && (<SnackBarNotification message='No more data' open={carsStore.isEmpty} /> ) }
-      
+      {carsStore.isLoading && <CircularProgress className={classes.progres} />}
+      {carsStore.isEmpty && (
+        <SnackBarNotification message='No more data' open={carsStore.isEmpty} />
+      )}
     </Container>
   );
 };

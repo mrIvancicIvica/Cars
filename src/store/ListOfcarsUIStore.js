@@ -1,17 +1,73 @@
 import { makeAutoObservable } from 'mobx';
+import fb from '../firebase/firebase.store';
+import carStore from './CarsStore';
 
 class ListOfcarsUIStore {
-
   page = 0;
-  rowsPerPage= 5
-  valueToOrderBy ='name'
-  orederDirection='asc'
+  rowsPerPage = 5;
+  valueToOrderBy = 'name';
+  orederDirection = 'asc';
   snackBarState = false;
-  
-
+  toggleOrdering = false;
 
   constructor() {
     makeAutoObservable(this);
+  }
+
+  togleBrand() {
+    this.toggleOrdering = !this.toggleOrdering;
+    if (this.toggleOrdering === false) {
+      fb.car.orderBy('brand', 'asc').onSnapshot((snap) => {
+        const toggleData = [];
+        snap.forEach((doc) => toggleData.push(doc.data()));
+        carStore.cars = toggleData;
+      });
+    } else {
+      fb.car.orderBy('brand', 'desc').onSnapshot((snap) => {
+        const toggleData = [];
+        snap.forEach((doc) => toggleData.push(doc.data()));
+        carStore.cars = toggleData;
+      });
+    }
+  }
+
+  toggleModel() {
+    this.toggleOrdering = !this.toggleOrdering;
+    if (this.toggleOrdering === false) {
+      fb.car.orderBy('model', 'asc').onSnapshot((snap) => {
+        const toggleData = [];
+        snap.forEach((doc) => toggleData.push(doc.data()));
+        carStore.cars = toggleData;
+      });
+    } else {
+      fb.car.orderBy('model', 'desc').onSnapshot((snap) => {
+        const toggleData = [];
+        snap.forEach((doc) => toggleData.push(doc.data()));
+        carStore.cars = toggleData;
+      });
+    }
+  }
+
+
+
+  toggleColor(){
+    this.toggleOrdering = !this.toggleOrdering;
+    if (this.toggleOrdering === false) {
+      fb.car.orderBy('color', 'asc').onSnapshot((snap) => {
+        const toggleData = [];
+        snap.forEach((doc) => toggleData.push(doc.data()));
+        carStore.cars = toggleData;
+      });
+    } else {
+      fb.car.orderBy('color', 'desc').onSnapshot((snap) => {
+        const toggleData = [];
+        snap.forEach((doc) => toggleData.push(doc.data()));
+        carStore.cars = toggleData;
+      });
+    }
+
+
+
   }
 
   descendingComparator = (a, b, orderBy) => {
@@ -24,7 +80,7 @@ class ListOfcarsUIStore {
     return 0;
   };
 
-  getComparator = (order, orderBy) => 
+  getComparator = (order, orderBy) =>
     order === 'desc'
       ? (a, b) => this.descendingComparator(a, b, orderBy)
       : (a, b) => -this.descendingComparator(a, b, orderBy);
@@ -39,32 +95,29 @@ class ListOfcarsUIStore {
     return stabilizedThis.map((el) => el[0]);
   };
 
-
-   handleChangePage = (event, newPage) => {
-    this.page = newPage
+  handleChangePage = (event, newPage) => {
+    this.page = newPage;
   };
 
-   handleChangeRowsPerPage = (event) => {
-    this.rowsPerPage= parseInt(event.target.value, 10)
-    this.page=0
+  handleChangeRowsPerPage = (event) => {
+    this.rowsPerPage = parseInt(event.target.value, 10);
+    this.page = 0;
   };
 
   handleRequestSort = (event, property) => {
     const isAscending =
       this.valueToOrderBy === property && this.orederDirection === 'asc';
-    this.valueToOrderBy= property
-    this.orederDirection = isAscending ? 'desc' : 'asc'
+    this.valueToOrderBy = property;
+    this.orederDirection = isAscending ? 'desc' : 'asc';
   };
 
   createSortHandler = (property) => (event) => {
     this.handleRequestSort(event, property);
   };
 
-  setOpenSnack=(open)=> {
+  setOpenSnack = (open) => {
     this.snackBarState = open;
-  }
-
- 
+  };
 }
 
 const listOfcarsUIStore = new ListOfcarsUIStore();
