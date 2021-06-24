@@ -202,15 +202,14 @@ const ListOfCars = () => {
 
               <TableCell align='right' key='model'>
                 <TableSortLabel
-                onClick={()=> listOfcarsUIStore.toggleModel()}
 
-                  // active={listOfcarsUIStore.valueToOrderBy === 'model'}
-                  // direction={
-                  //   listOfcarsUIStore.valueToOrderBy === 'model'
-                  //     ? listOfcarsUIStore.orederDirection
-                  //     : 'asc'
-                  // }
-                  // onClick={listOfcarsUIStore.createSortHandler('model')}
+                  active={listOfcarsUIStore.valueToOrderBy === 'model'}
+                  direction={
+                    listOfcarsUIStore.valueToOrderBy === 'model'
+                      ? listOfcarsUIStore.orederDirection
+                      : 'asc'
+                  }
+                  onClick={listOfcarsUIStore.createSortHandler('model')}
                 >
                   Model
                 </TableSortLabel>
@@ -218,18 +217,13 @@ const ListOfCars = () => {
 
               <TableCell align='right' key='color'>
                 <TableSortLabel
-
-                onClick={()=> listOfcarsUIStore.toggleColor()}
-
-
-                  // active={listOfcarsUIStore.valueToOrderBy === 'color'}
-                  // direction={
-                  //   listOfcarsUIStore.valueToOrderBy === 'color'
-                  //     ? listOfcarsUIStore.orederDirection
-                  //     : 'asc'
-                  // }
-                  // onClick={listOfcarsUIStore.createSortHandler('color')}
-                
+                  active={listOfcarsUIStore.valueToOrderBy === 'color'}
+                  direction={
+                    listOfcarsUIStore.valueToOrderBy === 'color'
+                      ? listOfcarsUIStore.orederDirection
+                      : 'asc'
+                  }
+                  onClick={listOfcarsUIStore.createSortHandler('color')}
                 >
                   Color
                 </TableSortLabel>

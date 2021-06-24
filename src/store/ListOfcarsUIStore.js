@@ -31,44 +31,10 @@ class ListOfcarsUIStore {
     }
   }
 
-  toggleModel() {
-    this.toggleOrdering = !this.toggleOrdering;
-    if (this.toggleOrdering === false) {
-      fb.car.orderBy('model', 'asc').onSnapshot((snap) => {
-        const toggleData = [];
-        snap.forEach((doc) => toggleData.push(doc.data()));
-        carStore.cars = toggleData;
-      });
-    } else {
-      fb.car.orderBy('model', 'desc').onSnapshot((snap) => {
-        const toggleData = [];
-        snap.forEach((doc) => toggleData.push(doc.data()));
-        carStore.cars = toggleData;
-      });
-    }
-  }
 
 
 
-  toggleColor(){
-    this.toggleOrdering = !this.toggleOrdering;
-    if (this.toggleOrdering === false) {
-      fb.car.orderBy('color', 'asc').onSnapshot((snap) => {
-        const toggleData = [];
-        snap.forEach((doc) => toggleData.push(doc.data()));
-        carStore.cars = toggleData;
-      });
-    } else {
-      fb.car.orderBy('color', 'desc').onSnapshot((snap) => {
-        const toggleData = [];
-        snap.forEach((doc) => toggleData.push(doc.data()));
-        carStore.cars = toggleData;
-      });
-    }
 
-
-
-  }
 
   descendingComparator = (a, b, orderBy) => {
     if (b[orderBy] < a[orderBy]) {
