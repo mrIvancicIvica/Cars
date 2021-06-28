@@ -4,8 +4,9 @@ import { Button, TextField, Grid, Container } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { observer } from 'mobx-react';
-import {useHistory} from 'react-router-dom'
-import carsStore from '../store/CarsStore'
+import { useHistory } from 'react-router-dom';
+import carsStore from '../store/CarsStore';
+import carsMakeServices from '../firebase/CarsMakeServices';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,7 +32,7 @@ const Schema = Yup.object().shape({
 });
 
 const EditCars = () => {
- const  history = useHistory()
+  const history = useHistory();
   const formik = useFormik({
     initialValues: {
       id: carsStore.currentCar.id,
@@ -40,9 +41,9 @@ const EditCars = () => {
       color: carsStore.currentCar.color,
     },
     validationSchema: Schema,
-    onSubmit: ({id, brand, model, color }) => {
-      carsStore.onUpdateCar(id,brand, model, color)
-      history.push('/')
+    onSubmit: ({ id, brand, model, color }) => {
+      carsMakeServices.onUpdateCar(id, brand, model, color);
+      history.push('/');
     },
   });
   const classes = useStyles();

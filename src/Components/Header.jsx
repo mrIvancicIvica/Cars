@@ -32,35 +32,22 @@ const Header = () => {
   const classes = useStyles();
 
   return (
-      <>
-        <AppBar>
-          <Toolbar>
-            <Typography className={classes.title} variant='h4'>
-              <Link className={classes.decor} to='/'>
-                Cars
-              </Link>
-            </Typography>
-            <Button variant='outlined'>
-              <Link className={classes.decor} to='/newcar'>
-                Add New Car
-              </Link>
-            </Button>
-
-            {/* <TextField
-            className={classes.margin}
-            variant='outlined'
-            placeholder='Search...'
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Search />
-                </InputAdornment>
-              ),
-            }}
-          /> */}
-          </Toolbar>
-        </AppBar>
-        <div className={classes.offset} />
+    <>
+      <AppBar>
+        <Toolbar>
+          <Typography className={classes.title} variant='h4'>
+            <Link className={classes.decor} to='/'>
+              Cars
+            </Link>
+          </Typography>
+          <Button variant='outlined'>
+            <Link className={classes.decor} to='/newcar'>
+              Add New Car
+            </Link>
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <div className={classes.offset} />
     </>
   );
 };

@@ -1,18 +1,22 @@
 import React from 'react';
-import {TextField,Button, Container, Grid,MenuItem,} from '@material-ui/core';
+import {
+  TextField,
+  Button,
+  Container,
+  Grid,
+  MenuItem,
+} from '@material-ui/core';
 import { observer } from 'mobx-react';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
-import {v4 as uuid} from 'uuid'
-import carsStore from '../store/CarsStore';
+import { v4 as uuid } from 'uuid';
 import addNewCarUiStore from '../store/AddNewCarUIStore';
-import listOfcarsUIStore from '../store/ListOfcarsUIStore'
-
+import listOfcarsUIStore from '../store/ListOfcarsUIStore';
+import carsMakeServices from '../firebase/CarsMakeServices';
 
 const AddNewCar = () => {
   const classes = addNewCarUiStore.useStyles();
   const history = useHistory();
-
 
   return (
     <Container maxWidth='md' component='main'>
@@ -20,13 +24,12 @@ const AddNewCar = () => {
         <h2>Add New Car</h2>
 
         <Formik
-          initialValues={{id: uuid(), brand: '', model: '', color: '' }}
+          initialValues={{ id: uuid(), brand: '', model: '', color: '' }}
           validationSchema={addNewCarUiStore.Schema}
           onSubmit={(value) => {
-            carsStore.adCar(value);
+            carsMakeServices.adCar(value);
             history.push('/');
             listOfcarsUIStore.setOpenSnack(true);
-
           }}
         >
           {(props) => (

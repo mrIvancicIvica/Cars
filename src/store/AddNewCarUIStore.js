@@ -27,7 +27,7 @@ class AddNewCarUIStore {
     { id: 3, model: 'LS Hybrid' },
     { id: 3, model: 'Camaro' },
   ];
-  
+
   CarsColor = [
     { id: 1, color: 'Suolred' },
     { id: 2, color: 'Black' },
